@@ -22,9 +22,9 @@ def run():
             market_maker.run()
         except ImportError:
             print('Can\'t find settings.py. Run "marketmaker setup" to create project.')
-		except:
-			print('Restart marketmaker')
-			os.startfile("marketmaker.exe")
+        except:
+            print('Restart marketmaker')
+            os.startfile("marketmaker.exe")
 
 def copy_files():
     package_base = os.path.dirname(__file__)
