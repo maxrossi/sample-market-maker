@@ -549,6 +549,8 @@ def run():
         om.run_loop()
     except (KeyboardInterrupt, SystemExit):
         sys.exit()
-    except:
-        print('Restart marketmaker\n\n')
-        os.execl(sys.executable, sys.executable, *sys.argv)
+    # Permanent restart is already provided by using systemd service with Restart=always on Linux
+    # except:
+        # print('Restart marketmaker\n\n')
+        # os.execl(sys.executable, sys.executable, *sys.argv)
+
