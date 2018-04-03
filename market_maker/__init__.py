@@ -1,5 +1,5 @@
 import argparse
-import os
+import os, sys
 
 import shutil
 
@@ -21,10 +21,7 @@ def run():
             from market_maker import market_maker
             market_maker.run()
         except ImportError:
-            print('Can\'t find settings.py. Run "marketmaker setup" to create project.')
-        except:
-            print('Restart marketmaker')
-            os.startfile("marketmaker.exe")
+            print('Can\'t find settings.py. Run "marketmaker setup" to create project.') 
 
 def copy_files():
     package_base = os.path.dirname(__file__)

@@ -220,7 +220,8 @@ class OrderManager:
         self.reset()
 
     def reset(self):
-        self.exchange.cancel_all_orders()
+        #MaxHype: do NOT cancel ALL orders on start
+        #self.exchange.cancel_all_orders()
         self.sanity_check()
         self.print_status()
 
@@ -485,9 +486,11 @@ class OrderManager:
         return self.exchange.is_open()
 
     def exit(self):
-        logger.info("Shutting down. All open orders will be cancelled.")
+        #logger.info("Shutting down. All open orders will be cancelled.")
+        logger.info("Shutting down")
         try:
-            self.exchange.cancel_all_orders()
+            #MaxHype: do NOT cancel ALL orders on exit
+            #self.exchange.cancel_all_orders()
             self.exchange.bitmex.exit()
         except errors.AuthenticationError as e:
             logger.info("Was not authenticated; could not cancel orders.")
@@ -546,3 +549,6 @@ def run():
         om.run_loop()
     except (KeyboardInterrupt, SystemExit):
         sys.exit()
+    except:
+        print('Restart marketmaker\n\n')
+        os.execl(sys.executable, sys.executable, *sys.argv)
