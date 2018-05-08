@@ -194,11 +194,11 @@ class BitMEXWebsocket():
         '''On subscribe, this data will come down. Wait for it.'''
         # Wait for the keys to show up from the ws
         conn_timeout = 60
-        while not {'margin', 'position', 'order'} <= set(self.data) and conn_timeout and not self._error:
+        while not {'margin', 'position', 'order'} <= set(self.data) and conn_timeout > 0 and not self._error:
             sleep(0.1)
             conn_timeout -= 0.1
 
-        if not conn_timeout or self._error:
+        if conn_timeout <= 0 or self._error:
             self.logger.error("__wait_for_account timeout or error! Exiting.")
             self.exit()
             sys.exit(1)		
@@ -206,11 +206,11 @@ class BitMEXWebsocket():
     def __wait_for_symbol(self, symbol):
         '''On subscribe, this data will come down. Wait for it.'''
         conn_timeout = 60
-        while not {'instrument', 'trade', 'quote'} <= set(self.data) and conn_timeout and not self._error:
+        while not {'instrument', 'trade', 'quote'} <= set(self.data) and conn_timeout > 0 and not self._error:
             sleep(0.1)
             conn_timeout -= 0.1
 	
-        if not conn_timeout or self._error:
+        if conn_timeout <= 0 or self._error:
             self.logger.error("__wait_for_symbol timeout or error! Exiting.")
             self.exit()
             sys.exit(1)	
