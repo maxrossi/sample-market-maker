@@ -548,9 +548,11 @@ def run():
     try:
         om.run_loop()
     except (KeyboardInterrupt, SystemExit):
-        sys.exit()
-    # Permanent restart is already provided by using systemd service with Restart=always on Linux
-    # except:
-        # print('Restart marketmaker\n\n')
-        # os.execl(sys.executable, sys.executable, *sys.argv)
+        sys.exit()     
+    except Exception as e:
+        if str(e) == 'Insufficient Funds':
+            sys.exit()
+        else:
+            print('Restart marketmaker\n\n')
+            os.execl(sys.executable, sys.executable, *sys.argv)
 
