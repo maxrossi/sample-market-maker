@@ -548,11 +548,12 @@ def run():
     try:
         om.run_loop()
     except (KeyboardInterrupt, SystemExit):
-        sys.exit()     
+        sys.exit()         
     except Exception as e:
-        if str(e) == 'Insufficient Funds':
+        if type(e) == requests.exceptions.HTTPError and 400 <= e.response.status_code < 500: # 4xx error
             sys.exit()
         else:
             print('Restart marketmaker\n\n')
             os.execl(sys.executable, sys.executable, *sys.argv)
+
 

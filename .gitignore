@@ -6,3 +6,4 @@ env
 .idea/
 /.vs/sample-market-maker/v15/.suo
 /sample-market-maker.pyproj
+sample-market-maker.sln
