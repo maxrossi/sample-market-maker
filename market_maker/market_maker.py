@@ -458,7 +458,7 @@ class OrderManager:
             logger.error("First buy position: %s\nBitMEX Best Ask: %s\nFirst sell position: %s\nBitMEX Best Bid: %s" %
                          (self.get_price_offset(-1), ticker["sell"], self.get_price_offset(1), ticker["buy"]))
             logger.error("Sanity check failed, exchange data is inconsistent")
-            self.exit()
+            sys.exit()
 
         # Messaging if the position limits are reached
         if self.long_position_limit_exceeded():
@@ -497,7 +497,8 @@ class OrderManager:
         except Exception as e:
             logger.info("Unable to cancel orders: %s" % e)
 
-        sys.exit()
+		# MaxHype: do NOT CALL sys.exit, this is a func registered at atexit.register that gets called BY a sys.exit
+        #sys.exit()
 
     def run_loop(self):
         while True:
@@ -553,7 +554,6 @@ def run():
         if type(e) == requests.exceptions.HTTPError and 400 <= e.response.status_code < 500: # 4xx error
             sys.exit()
         else:
-            print('Restart marketmaker\n\n')
-            os.execl(sys.executable, sys.executable, *sys.argv)
+            om.restart()
 
 
