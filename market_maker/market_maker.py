@@ -518,7 +518,8 @@ class OrderManager:
             self.print_status()  # Print skew, delta, etc
             self.place_orders()  # Creates desired orders and converges to existing orders
 
-    def restart(self):
+    @staticmethod
+    def restart():
         logger.info("Restarting the market maker...")
         os.execv(sys.executable, [sys.executable] + sys.argv)
 
@@ -555,8 +556,8 @@ def run():
             logger.info('Exiting for 4xx error')
             sys.exit()
         else:
-            om.restart()
+            OrderManager.restart()
     except (Exception, IndexError):
-        om.restart()
+        OrderManager.restart()
 
 
