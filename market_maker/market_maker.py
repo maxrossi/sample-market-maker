@@ -544,9 +544,8 @@ def margin(instrument, quantity, price):
 def run():
     logger.info('BitMEX Market Maker Version: %s\n' % constants.VERSION)
 
-    om = OrderManager()
-    # Try/except just keeps ctrl-c from printing an ugly stacktrace
     try:
+        om = OrderManager()    
         om.run_loop()
     except (KeyboardInterrupt, SystemExit):
         logger.info('Exiting for KeyboardInterrupt or SystemExit')
