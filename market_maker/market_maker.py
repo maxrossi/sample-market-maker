@@ -557,7 +557,7 @@ def run():
             sys.exit()
         else:
             om.restart()
-    except Exception as e:
+    except (Exception, IndexError):
         om.restart()
 
 
