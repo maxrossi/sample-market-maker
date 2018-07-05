@@ -549,9 +549,11 @@ def run():
     try:
         om.run_loop()
     except (KeyboardInterrupt, SystemExit):
+        logger.info('Exiting for KeyboardInterrupt or SystemExit')
         sys.exit()         
     except Exception as e:
         if type(e) == requests.exceptions.HTTPError and 400 <= e.response.status_code < 500: # 4xx error
+            logger.info('Exiting for 4xx error')
             sys.exit()
         else:
             om.restart()
