@@ -1,4 +1,4 @@
-import sys
+import sys, os
 import websocket
 import threading
 import traceback
@@ -35,7 +35,7 @@ class BitMEXWebsocket():
         self.__reset()
 
     def __del__(self):
-        self.exit()
+        self.exit()   
 
     def connect(self, endpoint="", symbol="XBTN15", shouldAuth=True):
         '''Connect to the websocket and initialize data stores.'''
@@ -137,7 +137,11 @@ class BitMEXWebsocket():
 
     def exit(self):
         self.exited = True
-        self.ws.close()
+        self.ws.close()       
+
+    def restart(self):
+        self.logger.info("Restarting BitMEXWebsocket...")
+        os.execv(sys.executable, [sys.executable] + sys.argv)
 
     #
     # Private methods
@@ -172,7 +176,9 @@ class BitMEXWebsocket():
         if not conn_timeout or self._error:
             self.logger.error("Couldn't connect to WS! Exiting.")
             self.exit()
-            sys.exit(1)
+            #sys.exit(1)
+            sleep(settings.API_ERROR_INTERVAL)
+            self.restart()	
 
     def __get_auth(self):
         '''Return auth headers. Will use API Keys if present in settings.'''
@@ -201,7 +207,9 @@ class BitMEXWebsocket():
         if conn_timeout <= 0 or self._error:
             self.logger.error("__wait_for_account timeout or error! Exiting.")
             self.exit()
-            sys.exit(1)		
+            #sys.exit(1)
+            sleep(settings.API_ERROR_INTERVAL)
+            self.restart()		
 
     def __wait_for_symbol(self, symbol):
         '''On subscribe, this data will come down. Wait for it.'''
@@ -209,11 +217,13 @@ class BitMEXWebsocket():
         while not {'instrument', 'trade', 'quote'} <= set(self.data) and conn_timeout > 0 and not self._error:
             sleep(0.1)
             conn_timeout -= 0.1
-	
+
         if conn_timeout <= 0 or self._error:
             self.logger.error("__wait_for_symbol timeout or error! Exiting.")
             self.exit()
-            sys.exit(1)	
+            #sys.exit(1)
+            sleep(settings.API_ERROR_INTERVAL)
+            self.restart()		
 
     def __send_command(self, command, args):
         '''Send a raw command.'''
