@@ -553,11 +553,15 @@ def run():
         sys.exit() 
     except requests.exceptions.HTTPError as e:
         if 400 <= e.response.status_code < 500: # 4xx error
-            logger.info('Exiting for 4xx error')
+            logger.info('Exiting for %d error' % e.response.status_code)
             sys.exit()
         else:
             OrderManager.restart()
-    except (Exception, IndexError):
-        OrderManager.restart()
+    except (Exception, IndexError) as e:
+        if str(e) == 'Insufficient Funds':
+            logger.info('Exiting for Insufficient Funds')
+            sys.exit()
+        else:
+            OrderManager.restart()
 
 
